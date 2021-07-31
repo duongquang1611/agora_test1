@@ -12,13 +12,27 @@ import APIProvider from 'utilities/context/APIProvider';
 import SplashScreen from 'react-native-splash-screen';
 import { SocketProvider } from 'utilities/SocketProvider';
 import { addMenuClearAsyncStorage, isIos } from 'utilities/helper';
+import Config from 'react-native-config';
+import codePush from 'react-native-code-push';
 
 LogBox.ignoreLogs(['Require cycle:']);
 
 const App: React.FunctionComponent = () => {
     useEffect(() => {
         addMenuClearAsyncStorage();
-        SplashScreen.hide();
+        __DEV__
+            ? SplashScreen.hide()
+            : codePush
+                  .sync({
+                      updateDialog: undefined,
+                      installMode: codePush.InstallMode.IMMEDIATE,
+                      deploymentKey: !isIos
+                          ? Config.CODEPUSH_ANDROID_DEVELOPMENT_KEY
+                          : Config.CODEPUSH_IOS_DEVELOPMENT_KEY,
+                  })
+                  .then(() => {
+                      SplashScreen.hide();
+                  });
     }, []);
     return (
         <Provider store={store}>

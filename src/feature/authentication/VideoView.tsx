@@ -3,6 +3,7 @@ import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
 import { StyledButton, StyledIcon, StyledInput, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
+import StyledHeader from 'components/common/StyledHeader';
 import FeatureVideoCall from 'feature/assessment/components/FeatureVideoCall';
 import OptionVideoCall from 'feature/assessment/components/OptionVideoCall';
 import { AGORA, staticValue } from 'feature/staticData';
@@ -260,7 +261,8 @@ const VideoView = ({ route }: any) => {
 
     return (
         <SafeAreaView style={styles.safeView}>
-            <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
+            {/* <StatusBar backgroundColor={'white'} barStyle={'dark-content'} /> */}
+            <StyledHeader title={`Channel ${channelName}`} hasBack={false} customContainer={styles.headerStyle} />
             <View style={styles.fullView}>{joinSucceed && renderRemoteVideos()}</View>
             <View style={styles.container}>
                 {joinSucceed && <View style={styles.remoteVideo}>{renderVideos()}</View>}
@@ -293,7 +295,6 @@ const VideoView = ({ route }: any) => {
 };
 const styles = ScaledSheet.create({
     safeView: {
-        paddingHorizontal: '10@vs',
         flex: 1,
     },
     container: {
@@ -379,6 +380,9 @@ const styles = ScaledSheet.create({
     startCallBtn: {
         width: '100%',
         marginBottom: '10@vs',
+    },
+    headerStyle: {
+        backgroundColor: Themes.COLORS.primary,
     },
 });
 

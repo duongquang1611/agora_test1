@@ -84,7 +84,7 @@ const styles = ScaledSheet.create({
         marginTop: StatusBar.currentHeight ? 0 : Metrics.safeTopPadding,
         justifyContent: 'center',
         borderBottomColor: Themes.COLORS.concrete,
-        height: '44@vs',
+        height: '48@vs',
     },
     containerBack: {
         marginRight: 'auto',
@@ -113,7 +113,7 @@ const styles = ScaledSheet.create({
         fontSize: '17@s',
         fontWeight: '600',
         lineHeight: 25.5,
-        color: Themes.COLORS.black,
+        color: Themes.COLORS.white,
     },
     containerRight: {
         marginLeft: 'auto',
