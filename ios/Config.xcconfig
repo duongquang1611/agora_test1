@@ -1,0 +1,10 @@
+//
+//  Config.xcconfig
+//  sellme
+//
+//  Created by Cuong ID on 1/15/21.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+#include? "tmp.xcconfig"
