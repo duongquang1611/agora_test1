@@ -22,18 +22,22 @@ const FeatureVideoCall = (props: any) => {
                 sizeIcon={30}
             />
 
-            <ItemOptionVideoCall
-                icon={Images.icons.videoCall.camera}
-                onPress={handleChooseImage}
-                customStyle={[styles.containerOption, customStyle]}
-                sizeIcon={28}
-            />
-            <ItemOptionVideoCall
-                icon={Images.icons.videoCall.message}
-                onPress={handleMessage}
-                customStyle={[styles.containerOption, customStyle]}
-                sizeIcon={28}
-            />
+            {!!handleChooseImage && (
+                <ItemOptionVideoCall
+                    icon={Images.icons.videoCall.camera}
+                    onPress={handleChooseImage}
+                    customStyle={[styles.containerOption, customStyle]}
+                    sizeIcon={28}
+                />
+            )}
+            {!!handleMessage && (
+                <ItemOptionVideoCall
+                    icon={Images.icons.videoCall.message}
+                    onPress={handleMessage}
+                    customStyle={[styles.containerOption, customStyle]}
+                    sizeIcon={28}
+                />
+            )}
         </View>
     );
 };
@@ -42,7 +46,7 @@ const styles = ScaledSheet.create({
     featureContainer: {
         flexDirection: 'row',
         justifyContent: 'space-around',
-        width: '55%',
+        // width: '55%',
     },
     endVideo: {
         backgroundColor: Themes.COLORS.videoCallView.endVideo,
@@ -58,7 +62,7 @@ const styles = ScaledSheet.create({
         },
         shadowOpacity: 0.37,
         shadowRadius: 7.49,
-
+        marginLeft: '10@s',
         elevation: 12,
     },
 });

@@ -36,116 +36,63 @@ import SelectTransfer from 'feature/assessment/transfer/SelectTransfer';
 import VideoCallView from 'feature/assessment/VideoCallView';
 import TransactionHistoryDetail from 'feature/history/TransactionHistoryDetail';
 import OtpView from 'feature/identification/OtpView';
-import SelectProvince from 'feature/identification/SelectProvince';
 import React, { useEffect } from 'react';
 import { Host } from 'react-native-portalize';
 import { useDispatch, useSelector } from 'react-redux';
 import navigationConfigs from '../config/options';
-import { APP_ROUTE, ASSESSMENT_ROUTE, IDENTIFY_ROUTE, TAB_NAVIGATION_ROOT, WEBVIEW_ROUTE } from '../config/routes';
+import {
+    ACCOUNT_ROUTE,
+    APP_ROUTE,
+    ASSESSMENT_ROUTE,
+    HISTORY_ROUTE,
+    IDENTIFY_ROUTE,
+    WEBVIEW_ROUTE,
+} from '../config/routes';
 import AuthStack from './AuthScenes';
 import MainTabContainer from './TabScenes';
 
 const MainStack = createStackNavigator();
 
 const AppStack = () => {
-    const { selectedKen = false } = useSelector((state: any) => state.common);
     return (
         <Host>
             <MainStack.Navigator headerMode={'none'} screenOptions={navigationConfigs}>
-                {!selectedKen && <MainStack.Screen name={IDENTIFY_ROUTE.SELECT_PROVINCE} component={SelectProvince} />}
                 <MainStack.Screen name={APP_ROUTE.MAIN_TAB} component={MainTabContainer} />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.SELECT_TRANSFER}
-                    component={SelectTransfer}
-                />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.SELECT_TRANSFER} component={SelectTransfer} />
                 <MainStack.Screen name={ASSESSMENT_ROUTE.VIDEO_CALL_VIEW} component={VideoCallView} />
-                <MainStack.Screen name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.ADDRESS} component={AddressNameScreen} />
+                <MainStack.Screen name={ACCOUNT_ROUTE.ADDRESS} component={AddressNameScreen} />
                 <MainStack.Screen name={ASSESSMENT_ROUTE.BRAND_CATEGORY_VIEW} component={BrandCategoryView} />
                 <MainStack.Screen name={IDENTIFY_ROUTE.OTP_VIEW} component={OtpView} />
-                <MainStack.Screen name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.PERSON_INFO} component={SettingPersonInfo} />
-                <MainStack.Screen name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.CHANGE_PHONE} component={ChangePhoneNumber} />
+                <MainStack.Screen name={ACCOUNT_ROUTE.PERSON_INFO} component={SettingPersonInfo} />
+                <MainStack.Screen name={ACCOUNT_ROUTE.CHANGE_PHONE} component={ChangePhoneNumber} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.METHOD_ASSESSMENT} component={MethodAssessmentView} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.ASSESSMENT_PRODUCT} component={AssessmentProductView} />
+                <MainStack.Screen name={ACCOUNT_ROUTE.OTP_CHANGE_PHONE} component={OtpChangePhoneView} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.PREPARE_TIME} component={PrepareTimeView} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.CONFIRM_CALL} component={ConfirmVideoCallView} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.CONFIRM_CONTENT} component={ConfirmContentView} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.EDIT_CONTENT} component={EditContentView} />
+                <MainStack.Screen name={HISTORY_ROUTE.DETAIL} component={TransactionHistoryDetail} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.TAKE_CERTIFICATE} component={TakeCertificateView} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.PRECIOUS_HAS_BRAND} component={PreciousHasBrand} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.SELECT_BANK} component={SelectBank} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.SELECT_ACCOUNT_TYPE} component={SelectAccountType} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.CONFIRM_TRANSFER} component={ConfirmTransfer} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.COMPLETE_TRANSFER} component={CompleteTransfer} />
+                <MainStack.Screen name={ASSESSMENT_ROUTE.CONVERSATION} component={ConversationView} />
+                <MainStack.Screen name={ACCOUNT_ROUTE.SETTINGS_NOTIFICATION} component={SettingNotification} />
+                <MainStack.Screen name={ACCOUNT_ROUTE.CHANGE_ID} component={CurrentID} />
+                <MainStack.Screen name={ACCOUNT_ROUTE.CONFIRM_CARD} component={ConfirmCard} />
+                <MainStack.Screen name={ACCOUNT_ROUTE.UPLOAD_PASSPORT} component={UploadPassport} />
+                <MainStack.Screen name={ACCOUNT_ROUTE.UPLOAD_DRIVER_CARD} component={UploadDriverCard} />
+                <MainStack.Screen name={ACCOUNT_ROUTE.UPLOAD_HEALTH_CARD} component={UploadHealthCard} />
                 <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.METHOD_ASSESSMENT}
-                    component={MethodAssessmentView}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.ASSESSMENT_PRODUCT}
-                    component={AssessmentProductView}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.OTP_CHANGE_PHONE}
-                    component={OtpChangePhoneView}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.PREPARE_TIME}
-                    component={PrepareTimeView}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.CONFIRM_CALL}
-                    component={ConfirmVideoCallView}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.CONFIRM_CONTENT}
-                    component={ConfirmContentView}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.EDIT_CONTENT}
-                    component={EditContentView}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.HISTORY_ROUTE.DETAIL}
-                    component={TransactionHistoryDetail}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.TAKE_CERTIFICATE}
-                    component={TakeCertificateView}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.PRECIOUS_HAS_BRAND}
-                    component={PreciousHasBrand}
-                />
-                <MainStack.Screen name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.SELECT_BANK} component={SelectBank} />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.SELECT_ACCOUNT_TYPE}
-                    component={SelectAccountType}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.CONFIRM_TRANSFER}
-                    component={ConfirmTransfer}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.COMPLETE_TRANSFER}
-                    component={CompleteTransfer}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ASSESSMENT_ROUTE.CONVERSATION}
-                    component={ConversationView}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.SETTINGS_NOTIFICATION}
-                    component={SettingNotification}
-                />
-                <MainStack.Screen name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.CHANGE_ID} component={CurrentID} />
-                <MainStack.Screen name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.CONFIRM_CARD} component={ConfirmCard} />
-                <MainStack.Screen name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.UPLOAD_PASSPORT} component={UploadPassport} />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.UPLOAD_DRIVER_CARD}
-                    component={UploadDriverCard}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.UPLOAD_HEALTH_CARD}
-                    component={UploadHealthCard}
-                />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.UPLOAD_RESIDENT_REGISTER_CARD}
+                    name={ACCOUNT_ROUTE.UPLOAD_RESIDENT_REGISTER_CARD}
                     component={UploadResidentRegisterCard}
                 />
 
-                <MainStack.Screen name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.CHANGE_ID_MENU} component={ChangeIDMenu} />
-                <MainStack.Screen
-                    name={TAB_NAVIGATION_ROOT.ACCOUNT_ROUTE.PICK_IMAGE_ID}
-                    component={UploadIndividualNumberCard}
-                />
+                <MainStack.Screen name={ACCOUNT_ROUTE.CHANGE_ID_MENU} component={ChangeIDMenu} />
+                <MainStack.Screen name={ACCOUNT_ROUTE.PICK_IMAGE_ID} component={UploadIndividualNumberCard} />
                 <MainStack.Screen name={ASSESSMENT_ROUTE.ASSESSMENT_VIEW} component={AssessmentView} />
                 <MainStack.Screen name={WEBVIEW_ROUTE.WEBVIEW} component={WebViewScreen} />
             </MainStack.Navigator>
@@ -156,16 +103,17 @@ const AppStack = () => {
 const Navigation: React.FunctionComponent = () => {
     const dispatch: any = useDispatch();
     const { userInfo } = useSelector((state: RootState) => state);
-    useEffect(() => {
-        (async () => {
-            try {
-                const dataResource = await apiResource.init();
-                dispatch(updateResource(dataResource?.data));
-            } catch (err) {
-                AlertMessage(err);
-            }
-        })();
-    }, []);
+    // useEffect(() => {
+    //     (async () => {
+    //         try {
+    //             const dataResource = await apiResource.init();
+    //             dispatch(updateResource(dataResource?.data));
+    //         } catch (err) {
+    //             AlertMessage(err);
+    //         }
+    //     })();
+    // }, []);
+
     if (userInfo?.token) {
         return <AppStack />;
     }

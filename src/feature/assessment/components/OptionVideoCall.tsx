@@ -24,12 +24,14 @@ const OptionVideoCall = (props: any) => {
                 icon={Images.icons.videoCall.volume}
                 onPress={() => toggleOption('muteAllRemoteAudio')}
             />
-            <ItemOptionVideoCall
-                icon={Images.icons.videoCall.end}
-                onPress={leaveRoomVideo}
-                customStyle={styles.endVideo}
-                sizeIcon={35}
-            />
+            {!!leaveRoomVideo && (
+                <ItemOptionVideoCall
+                    icon={Images.icons.videoCall.end}
+                    onPress={leaveRoomVideo}
+                    customStyle={styles.endVideo}
+                    sizeIcon={35}
+                />
+            )}
         </View>
     );
 };

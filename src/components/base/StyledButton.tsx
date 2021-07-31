@@ -8,13 +8,12 @@ import { StyledText, StyledTouchable } from '.';
 interface StyledButtonProps {
     title: string;
     customStyle?: StyleProp<ViewStyle>;
-    onPress(): void;
+    onPress?(): void;
     onLongPress?(): void;
     disabled?: boolean;
     isOutlineButton?: boolean;
     colorText?: string;
     customTitleStyle?: StyleProp<TextStyle>;
-    hitSlop?: number;
 }
 
 const StyledButton: React.FunctionComponent<StyledButtonProps> = (props: StyledButtonProps) => {
@@ -27,7 +26,7 @@ const StyledButton: React.FunctionComponent<StyledButtonProps> = (props: StyledB
         title,
         colorText,
         customTitleStyle,
-        hitSlop,
+        ...otherProps
     } = props;
     const bgColorContainer = disabled
         ? Themes.COLORS.westar
@@ -48,7 +47,7 @@ const StyledButton: React.FunctionComponent<StyledButtonProps> = (props: StyledB
             ]}
             onPress={onPress}
             onLongPress={onLongPress}
-            hitSlop={hitSlop}
+            {...otherProps}
         >
             <StyledText
                 i18nText={title}
@@ -60,8 +59,8 @@ const StyledButton: React.FunctionComponent<StyledButtonProps> = (props: StyledB
 
 const styles = ScaledSheet.create({
     container: {
-        height: 48,
-        width: Metrics.screenWidth - 76,
+        height: '48@vs',
+        // width: '100%',
         borderColor: Themes.COLORS.primary,
         justifyContent: 'center',
         alignItems: 'center',

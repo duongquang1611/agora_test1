@@ -1,11 +1,17 @@
+/* eslint-disable no-shadow */
 import Images from 'assets/images';
 import i18next from 'i18next';
 import Config from 'react-native-config';
 import { isIos } from 'utilities/helper';
 import appInfo from '../../app.json';
 
-/* eslint-disable import/prefer-default-export */
-/* eslint-disable no-shadow */
+export const AGORA = {
+    agoraAppId: 'd62d96fc554a4972b4c3ed2979470ca6',
+    token: '006d62d96fc554a4972b4c3ed2979470ca6IACcmi5O9tA+sYFkldSV5/IVpGPlshksgwy5lfrkgJdJWja3aTAAAAAAEADGdujzsW8GYQEAAQCxbwZh',
+    channelName: 'seminar_test',
+    uid: 0,
+};
+
 const staticValue = {
     TYPE_OF_IMAGE: {
         FRONT: 1,
@@ -419,13 +425,6 @@ export enum RedirectType {
     REFUSED_TRANSACTION = 12,
     DETAIL_TRANSACTION = 2,
 }
-
-export const AGORA = {
-    token:
-        '006d62d96fc554a4972b4c3ed2979470ca6IABXAKc2miPS5bSKkdoGdRpZHIGUGyMjrlG1HMKvRaof4Ax+f9gAAAAAEAAEa9nrqy5QYAEAAQCrLlBg',
-    channelName: 'test',
-    uid: 0,
-};
 
 export const PERMISSION_APP = {
     camera: 'camera',

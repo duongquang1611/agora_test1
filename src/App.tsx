@@ -10,32 +10,15 @@ import Navigation from 'navigation/scene/RootScenes';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import APIProvider from 'utilities/context/APIProvider';
 import SplashScreen from 'react-native-splash-screen';
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import AsyncStorage from '@react-native-community/async-storage';
 import { SocketProvider } from 'utilities/SocketProvider';
-import Config from 'react-native-config';
-import codePush from 'react-native-code-push';
-import { isIos } from 'utilities/helper';
+import { addMenuClearAsyncStorage, isIos } from 'utilities/helper';
 
 LogBox.ignoreLogs(['Require cycle:']);
 
 const App: React.FunctionComponent = () => {
     useEffect(() => {
-        // quick clear cache AsyncStorage
-        // AsyncStorage.clear();
-        __DEV__
-            ? SplashScreen.hide()
-            : codePush
-                  .sync({
-                      updateDialog: undefined,
-                      installMode: codePush.InstallMode.IMMEDIATE,
-                      deploymentKey: !isIos
-                          ? Config.CODEPUSH_ANDROID_DEVELOPMENT_KEY
-                          : Config.CODEPUSH_IOS_DEVELOPMENT_KEY,
-                  })
-                  .then(() => {
-                      SplashScreen.hide();
-                  });
+        addMenuClearAsyncStorage();
+        SplashScreen.hide();
     }, []);
     return (
         <Provider store={store}>

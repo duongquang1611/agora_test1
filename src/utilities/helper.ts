@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import i18next from 'i18next';
-import { Linking, Platform } from 'react-native';
+import { DevSettings, Linking, Platform } from 'react-native';
 import Picker from 'react-native-picker';
 import AsyncStorage from '@react-native-community/async-storage';
 import { staticValue } from 'feature/staticData';
@@ -63,3 +63,12 @@ export async function countJoinFunction(key: any, increase = true) {
     }
     return AsyncStorage.getItem(key);
 }
+
+export const addMenuClearAsyncStorage = () => {
+    if (__DEV__) {
+        DevSettings.addMenuItem('Clear AsyncStorage', () => {
+            AsyncStorage.clear();
+            DevSettings.reload();
+        });
+    }
+};

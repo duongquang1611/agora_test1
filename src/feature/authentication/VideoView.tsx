@@ -1,15 +1,11 @@
 /* eslint-disable no-underscore-dangle */
-import { closeTransaction } from 'api/assessment';
-import { getStatusTransaction } from 'api/home';
-import { updateStatusOffer } from 'api/offer';
-import { updateBlacklist } from 'app-redux/blacklist/actions';
-import Images from 'assets/images';
 import Metrics from 'assets/metrics';
 import { Themes } from 'assets/themes';
-import { StyledIcon, StyledInput, StyledText, StyledTouchable } from 'components/base';
+import { StyledButton, StyledIcon, StyledInput, StyledText, StyledTouchable } from 'components/base';
 import AlertMessage from 'components/base/AlertMessage';
-import useModal from 'components/base/modal/useModal';
-import { NAVIGATE_TYPE, staticValue, STATUS_OFFER, VIDEO_CALL } from 'feature/staticData';
+import FeatureVideoCall from 'feature/assessment/components/FeatureVideoCall';
+import OptionVideoCall from 'feature/assessment/components/OptionVideoCall';
+import { AGORA, staticValue } from 'feature/staticData';
 import useTakePhoto from 'hooks/useTakePhoto';
 import { debounce } from 'lodash';
 import { ACCOUNT_ROUTE, ASSESSMENT_ROUTE, HISTORY_ROUTE } from 'navigation/config/routes';
@@ -19,27 +15,29 @@ import { Keyboard, TextInput, View } from 'react-native';
 import RtcEngine, { RtcLocalView, RtcRemoteView, VideoRemoteState, VideoRenderMode } from 'react-native-agora';
 import AndroidKeyboardAdjust from 'react-native-android-keyboard-adjust';
 import Config from 'react-native-config';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { moderateScale, ScaledSheet, verticalScale } from 'react-native-size-matters';
 import { useDispatch, useSelector } from 'react-redux';
 import { isIos, logger } from 'utilities/helper';
+import { checkAudio, checkCamera } from 'utilities/permissions';
 import appInfo from '../../../app.json';
-import FeatureVideoCall from './components/FeatureVideoCall';
-import ModalLeaveRoom from './components/ModalLeaveRoom';
-import OptionVideoCall from './components/OptionVideoCall';
 
 interface AgoraState {
     token: string;
     channelName: string;
     uid: number;
     peerIds: number[];
-    joinSucceed: boolean;
 }
+
 let engine = new RtcEngine();
 let prevLocalCam = true;
+const initAgoraData = {
+    ...AGORA,
+    peerIds: [],
+};
 
-const VideoCalLView = ({ route }: any) => {
+const VideoView = ({ route }: any) => {
     const dispatch = useDispatch();
-    const [showMessage, setShowMessage] = useState(true);
     const [optionsCall, setOptionsCall] = useState<any>({
         muteAllRemoteAudio: false,
         muteLocalAudio: false,
@@ -47,24 +45,16 @@ const VideoCalLView = ({ route }: any) => {
         adminMuteVideo: false,
         remoteFullView: true,
     });
-    const {
-        agoraData = {
-            agoraAppId: staticValue.AGORA_APP_ID,
-        },
-    } = route?.params || {};
-    const [agoraState, setAgoraState] = useState<AgoraState>({
-        token: '',
-        channelName: '',
-        uid: 0,
-        peerIds: [],
-        ...agoraData,
-    });
+    const [agoraState, setAgoraState] = useState<AgoraState>(initAgoraData);
     const { token, channelName, peerIds } = agoraState;
     const [modeRemote, setModeRemote] = useState(VideoRenderMode.Hidden);
     const [modeLocal, setModeLocal] = useState(VideoRenderMode.Hidden);
     const { muteAllRemoteAudio, muteLocalAudio, enableLocalVideo, remoteFullView, adminMuteVideo } = optionsCall;
     const [joinSucceed, setJoinSucceed] = useState(false);
+
     const initAgora = async () => {
+        await checkCamera();
+        await checkAudio();
         engine = await RtcEngine.create(Config.AGORA_APP_ID);
         await engine.enableVideo();
         await engine.enableLocalAudio(!muteLocalAudio);
@@ -78,9 +68,7 @@ const VideoCalLView = ({ route }: any) => {
     };
 
     useEffect(() => {
-        initAgora().then(() => {
-            startCall();
-        });
+        initAgora();
         return () => {
             prevLocalCam = true;
             unMountVideo();
@@ -162,7 +150,7 @@ const VideoCalLView = ({ route }: any) => {
     const endCall = async () => {
         logger('end');
         await engine?.leaveChannel();
-        setAgoraState({ ...agoraData, peerIds: [] });
+        setAgoraState(initAgoraData);
         setJoinSucceed(false);
     };
 
@@ -274,9 +262,9 @@ const VideoCalLView = ({ route }: any) => {
     };
 
     const defaultVideo = (isLocal = true) => {
-        const renderText = () => (
+        return (
             <StyledText
-                i18nText={isLocal ? appInfo.displayName.toUpperCase() : 'videoView.adminMuteVideo'}
+                i18nText={isLocal ? 'LOCAL' : 'REMOTE'}
                 customStyle={[
                     styles.textAppName,
                     isLocal && { fontWeight: 'bold' },
@@ -284,46 +272,45 @@ const VideoCalLView = ({ route }: any) => {
                 ]}
             />
         );
-        return (remoteFullView && isLocal) || (!remoteFullView && !isLocal)
-            ? renderText()
-            : !showMessage && renderText();
     };
 
     return (
-        <>
-            <View style={styles.fullView}>
-                {joinSucceed && (remoteFullView ? renderRemoteVideos() : renderVideos())}
-            </View>
+        <SafeAreaView style={styles.safeView}>
+            <View style={styles.fullView}>{joinSucceed && renderRemoteVideos()}</View>
             <View style={styles.container}>
-                <View style={styles.remoteVideo}>
-                    {joinSucceed ? (!remoteFullView ? renderRemoteVideos() : renderVideos()) : defaultVideo()}
-                </View>
-                <View style={styles.featureContainer}>
+                <View style={styles.remoteVideo}>{joinSucceed && renderVideos()}</View>
+                {/* <View style={styles.featureContainer}>
                     <FeatureVideoCall
                         {...{
                             handleSwitchVideo,
                             handleSwitchCam,
-                            handleChooseImage: () => {
-                                toggleLocalVideo(false);
-                            },
                         }}
                         customStyle={styles.optionCall}
                     />
-                </View>
-                <OptionVideoCall
-                    customStyle={styles.optionsCall}
-                    {...{
-                        muteAllRemoteAudio,
-                        muteLocalAudio,
-                        enableLocalVideo,
-                        toggleOption,
-                    }}
-                />
+                </View> */}
+                {joinSucceed ? (
+                    <OptionVideoCall
+                        customStyle={styles.optionsCall}
+                        {...{
+                            muteAllRemoteAudio,
+                            muteLocalAudio,
+                            enableLocalVideo,
+                            toggleOption,
+                            leaveRoomVideo: endCall,
+                        }}
+                    />
+                ) : (
+                    <StyledButton title={'Start Call'} onPress={startCall} customStyle={styles.startCallBtn} />
+                )}
             </View>
-        </>
+        </SafeAreaView>
     );
 };
 const styles = ScaledSheet.create({
+    safeView: {
+        paddingHorizontal: '10@vs',
+        flex: 1,
+    },
     container: {
         flex: 1,
         paddingTop: Metrics.safeTopPadding,
@@ -404,6 +391,10 @@ const styles = ScaledSheet.create({
     optionsCall: {
         marginBottom: '30@vs',
     },
+    startCallBtn: {
+        width: '100%',
+        marginBottom: '10@vs',
+    },
 });
 
-export default VideoCalLView;
+export default VideoView;

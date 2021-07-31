@@ -14,8 +14,8 @@ const common = {
 const Light = {
     COLORS: {
         ...common,
-        primary: '#C79B60',
-        secondary: '#C79B60',
+        primary: '#4285F4',
+        secondary: '#0F9D58',
         twine90: 'rgba(199, 155, 96, 0.9)',
         textPrimary: '#000000',
         textSecondary: '#939292',

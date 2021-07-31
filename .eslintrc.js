@@ -33,7 +33,6 @@ module.exports = {
         '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/prefer-optional-chain': 'error',
         '@typescript-eslint/unbound-method': 'off',
-        '@typescript-eslint/no-unused-vars': 'error',
         '@typescript-eslint/camelcase': 'off',
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 'off',
@@ -67,6 +66,7 @@ module.exports = {
         'no-nested-ternary': 'off',
         'no-unused-expressions': 'off',
         'import/prefer-default-export': 'off',
+        '@typescript-eslint/no-unused-vars': 'off',
     },
     parserOptions: {
         ecmaVersion: 2018, // Allows for the parsing of modern ECMAScript features
