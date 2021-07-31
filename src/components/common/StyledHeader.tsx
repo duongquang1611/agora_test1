@@ -104,9 +104,9 @@ const styles = ScaledSheet.create({
         width: '80%',
         height: '100%',
         position: 'absolute',
-        paddingTop: '3@vs',
         alignItems: 'center',
         alignSelf: 'center',
+        justifyContent: 'center',
     },
     textTitle: {
         textAlign: 'center',

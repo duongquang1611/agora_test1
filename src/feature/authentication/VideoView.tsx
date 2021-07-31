@@ -188,16 +188,16 @@ const VideoView = ({ route }: any) => {
                     styles.containerLocalVideos,
                     !remoteFullView && { backgroundColor: Themes.COLORS.jumbo32 },
                 ]}
-                onPress={() => {
-                    remoteFullView && toggleOption('remoteFullView');
-                }}
+                // onPress={() => {
+                //     remoteFullView && toggleOption('remoteFullView');
+                // }}
             >
                 {enableLocalVideo ? (
                     <RtcLocalView.SurfaceView
                         style={styles.localVideo}
                         channelId={channelName}
                         renderMode={VideoRenderMode.Hidden}
-                        zOrderMediaOverlay={remoteFullView}
+                        zOrderMediaOverlay={!remoteFullView}
                     />
                 ) : (
                     defaultVideo()
@@ -207,32 +207,34 @@ const VideoView = ({ route }: any) => {
     };
 
     const renderRemoteVideos = () => {
+        console.log(peerIds);
         return (
             peerIds.length > 0 &&
             peerIds.map((value) => {
                 return (
-                    <StyledTouchable
-                        customStyle={[
-                            styles.containerRemoteVideos,
-                            remoteFullView && { backgroundColor: Themes.COLORS.jumbo32 },
-                        ]}
-                        key={value}
-                        onPress={() => {
-                            !remoteFullView && toggleOption('remoteFullView');
-                        }}
-                    >
-                        {adminMuteVideo ? (
-                            defaultVideo(false)
-                        ) : (
-                            <RtcRemoteView.SurfaceView
-                                style={styles.remote}
-                                uid={value}
-                                channelId={channelName}
-                                renderMode={VideoRenderMode.Hidden}
-                                zOrderMediaOverlay={!remoteFullView}
-                            />
-                        )}
-                    </StyledTouchable>
+                    <View style={styles.remoteVideo} key={value}>
+                        <StyledTouchable
+                            customStyle={[
+                                styles.containerRemoteVideos,
+                                remoteFullView && { backgroundColor: Themes.COLORS.jumbo32 },
+                            ]}
+                            // onPress={() => {
+                            //     !remoteFullView && toggleOption('remoteFullView');
+                            // }}
+                        >
+                            {adminMuteVideo ? (
+                                defaultVideo(false)
+                            ) : (
+                                <RtcRemoteView.SurfaceView
+                                    style={styles.remote}
+                                    uid={value}
+                                    channelId={channelName}
+                                    renderMode={VideoRenderMode.Hidden}
+                                    zOrderMediaOverlay={remoteFullView}
+                                />
+                            )}
+                        </StyledTouchable>
+                    </View>
                 );
             })
         );
@@ -263,9 +265,9 @@ const VideoView = ({ route }: any) => {
         <SafeAreaView style={styles.safeView}>
             {/* <StatusBar backgroundColor={'white'} barStyle={'dark-content'} /> */}
             <StyledHeader title={`Channel ${channelName}`} hasBack={false} customContainer={styles.headerStyle} />
-            <View style={styles.fullView}>{joinSucceed && renderRemoteVideos()}</View>
+            <View style={styles.fullView}>{joinSucceed && renderVideos()}</View>
             <View style={styles.container}>
-                {joinSucceed && <View style={styles.remoteVideo}>{renderVideos()}</View>}
+                {joinSucceed && renderRemoteVideos()}
                 {/* <View style={styles.featureContainer}>
                     <FeatureVideoCall
                         {...{
@@ -346,10 +348,8 @@ const styles = ScaledSheet.create({
         justifyContent: 'center',
         borderWidth: 1,
         borderColor: Themes.COLORS.backgroundPrimary,
-        position: 'absolute',
-        top: Metrics.safeTopPadding,
-        left: '15@s',
-        zIndex: 5,
+        marginTop: Metrics.safeTopPadding,
+        marginLeft: '15@s',
     },
     optionCall: {
         width: '28@s',
@@ -379,7 +379,6 @@ const styles = ScaledSheet.create({
     },
     startCallBtn: {
         width: '100%',
-        marginBottom: '10@vs',
     },
     headerStyle: {
         backgroundColor: Themes.COLORS.primary,
