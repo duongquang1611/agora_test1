@@ -11,7 +11,7 @@ import { debounce } from 'lodash';
 import { ACCOUNT_ROUTE, ASSESSMENT_ROUTE, HISTORY_ROUTE } from 'navigation/config/routes';
 import { navigate } from 'navigation/NavigationService';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { Keyboard, TextInput, View } from 'react-native';
+import { Keyboard, StatusBar, TextInput, View } from 'react-native';
 import RtcEngine, { RtcLocalView, RtcRemoteView, VideoRemoteState, VideoRenderMode } from 'react-native-agora';
 import AndroidKeyboardAdjust from 'react-native-android-keyboard-adjust';
 import Config from 'react-native-config';
@@ -47,8 +47,6 @@ const VideoView = ({ route }: any) => {
     });
     const [agoraState, setAgoraState] = useState<AgoraState>(initAgoraData);
     const { token, channelName, peerIds } = agoraState;
-    const [modeRemote, setModeRemote] = useState(VideoRenderMode.Hidden);
-    const [modeLocal, setModeLocal] = useState(VideoRenderMode.Hidden);
     const { muteAllRemoteAudio, muteLocalAudio, enableLocalVideo, remoteFullView, adminMuteVideo } = optionsCall;
     const [joinSucceed, setJoinSucceed] = useState(false);
 
@@ -182,18 +180,6 @@ const VideoView = ({ route }: any) => {
         }
     };
 
-    const onLayoutRemote = () => {
-        modeRemote === VideoRenderMode.Hidden && setModeRemote(VideoRenderMode.Fit);
-    };
-
-    const onLayoutLocal = () => {
-        setModeLocal(VideoRenderMode.Fit);
-    };
-
-    useEffect(() => {
-        modeLocal === VideoRenderMode.Fit && setModeLocal(VideoRenderMode.Hidden);
-    }, [modeLocal]);
-
     const renderVideos = () => {
         return (
             <StyledTouchable
@@ -209,9 +195,8 @@ const VideoView = ({ route }: any) => {
                     <RtcLocalView.SurfaceView
                         style={styles.localVideo}
                         channelId={channelName}
-                        renderMode={modeLocal}
+                        renderMode={VideoRenderMode.Hidden}
                         zOrderMediaOverlay={remoteFullView}
-                        onLayout={onLayoutLocal}
                     />
                 ) : (
                     defaultVideo()
@@ -242,9 +227,8 @@ const VideoView = ({ route }: any) => {
                                 style={styles.remote}
                                 uid={value}
                                 channelId={channelName}
-                                renderMode={modeRemote}
+                                renderMode={VideoRenderMode.Hidden}
                                 zOrderMediaOverlay={!remoteFullView}
-                                onLayout={onLayoutRemote}
                             />
                         )}
                     </StyledTouchable>
@@ -276,9 +260,10 @@ const VideoView = ({ route }: any) => {
 
     return (
         <SafeAreaView style={styles.safeView}>
+            <StatusBar backgroundColor={'white'} barStyle={'dark-content'} />
             <View style={styles.fullView}>{joinSucceed && renderRemoteVideos()}</View>
             <View style={styles.container}>
-                <View style={styles.remoteVideo}>{joinSucceed && renderVideos()}</View>
+                {joinSucceed && <View style={styles.remoteVideo}>{renderVideos()}</View>}
                 {/* <View style={styles.featureContainer}>
                     <FeatureVideoCall
                         {...{

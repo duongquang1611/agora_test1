@@ -32,7 +32,8 @@
         "open-folder-aab": "open ./android/app/build/outputs/bundle",
         "rebase": "git checkout develop && git pull origin develop && git checkout - && git rebase -",
         "no-edit": "git add . && git commit --amend --no-edit && git push origin HEAD -f",
-        "none": "git add . && git commit --amend --no-edit --no-verify && git push origin HEAD -f"
+        "none": "git add . && git commit --amend --no-edit --no-verify && git push origin HEAD -f",
+        "commit": "git add . && git commit -m 'Update Feature' && git push origin HEAD"
     },
     "dependencies": {
         "@react-native-community/async-storage": "^1.12.0",
