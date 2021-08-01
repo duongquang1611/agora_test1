@@ -71,7 +71,6 @@ const styles = ScaledSheet.create({
     title: {
         color: Themes.COLORS.white,
         fontSize: '15@ms',
-        lineHeight: 22.5,
         fontWeight: '600',
     },
 });

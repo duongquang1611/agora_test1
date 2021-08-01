@@ -7,7 +7,7 @@ import appInfo from '../../app.json';
 
 export const AGORA = {
     agoraAppId: 'd62d96fc554a4972b4c3ed2979470ca6',
-    token: '006d62d96fc554a4972b4c3ed2979470ca6IACcmi5O9tA+sYFkldSV5/IVpGPlshksgwy5lfrkgJdJWja3aTAAAAAAEADGdujzsW8GYQEAAQCxbwZh',
+    token: '006d62d96fc554a4972b4c3ed2979470ca6IAADRNhj6a1asUUCwDkq8p1l9mIIKkd55EaHFKWLJam33Ta3aTAAAAAAEAC1Unli1MQHYQEAAQDSxAdh',
     channelName: 'seminar_test',
     uid: 0,
 };

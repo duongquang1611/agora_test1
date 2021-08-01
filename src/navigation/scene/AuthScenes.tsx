@@ -18,13 +18,17 @@ import {
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { isIos } from 'utilities/helper';
+import LiveStreamView from 'feature/authentication/LiveStreamView';
+import IntroView from 'feature/authentication/IntroView';
 
 const MainStack = createStackNavigator();
 
 const AuthStack = () => {
     return (
         <MainStack.Navigator headerMode={'none'} screenOptions={navigationConfigs} keyboardHandlingEnabled={isIos}>
-            <MainStack.Screen name={AUTHENTICATE_ROUTE.LOGIN} component={VideoView} />
+            <MainStack.Screen name={AUTHENTICATE_ROUTE.INTRO} component={IntroView} />
+            <MainStack.Screen name={AUTHENTICATE_ROUTE.VIDEO} component={VideoView} />
+            <MainStack.Screen name={AUTHENTICATE_ROUTE.LIVE_STREAM} component={LiveStreamView} />
             <MainStack.Screen name={AUTHENTICATE_ROUTE.SEND_OTP} component={SendOTP} />
             <MainStack.Screen name={WEBVIEW_ROUTE.WEBVIEW} component={WebViewScreen} />
             <MainStack.Screen name={ASSESSMENT_ROUTE.VIDEO_CALL_VIEW} component={VideoCallView} />

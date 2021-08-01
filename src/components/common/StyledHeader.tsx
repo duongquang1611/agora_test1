@@ -48,7 +48,11 @@ const StyledHeader = (props: StyledHeaderProps) => {
                 <StatusBar backgroundColor={statusBarColor} barStyle={'dark-content'} {...props} />
                 {hasBack ? (
                     <StyledTouchable onPress={handleNavigate} customStyle={[styles.containerBack, customIconBack]}>
-                        <StyledIcon size={20} source={Images.icons.back} />
+                        <StyledIcon
+                            size={16}
+                            source={Images.icons.back}
+                            customStyle={{ tintColor: Themes.COLORS.white }}
+                        />
                     </StyledTouchable>
                 ) : (
                     <View style={styles.containerBack} />
@@ -85,6 +89,7 @@ const styles = ScaledSheet.create({
         justifyContent: 'center',
         borderBottomColor: Themes.COLORS.concrete,
         height: '48@vs',
+        alignItems: 'center',
     },
     containerBack: {
         marginRight: 'auto',
@@ -93,7 +98,6 @@ const styles = ScaledSheet.create({
         alignItems: 'center',
         width: '30@s',
         height: '30@s',
-        paddingTop: '3@vs',
     },
     containerTitleHasBack: {
         flex: 1,

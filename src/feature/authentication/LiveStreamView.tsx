@@ -44,7 +44,7 @@ const initAgoraData = {
     peerIds: [],
 };
 
-const VideoView = ({ route }: any) => {
+const LiveStreamView = () => {
     const dispatch = useDispatch();
     const [optionsCall, setOptionsCall] = useState<any>({
         muteAllRemoteAudio: false,
@@ -53,10 +53,12 @@ const VideoView = ({ route }: any) => {
         adminMuteVideo: false,
         remoteFullView: true,
     });
+    const [role, setRole] = useState(ClientRole.Audience);
     const [agoraState, setAgoraState] = useState<AgoraState>(initAgoraData);
     const { token, channelName, peerIds } = agoraState;
     const { muteAllRemoteAudio, muteLocalAudio, enableLocalVideo, remoteFullView, adminMuteVideo } = optionsCall;
     const [joinSucceed, setJoinSucceed] = useState(false);
+    const isClient = role === ClientRole.Audience;
 
     const initAgora = async () => {
         await checkCamera();
@@ -64,7 +66,11 @@ const VideoView = ({ route }: any) => {
         engine = await RtcEngine.create(Config.AGORA_APP_ID);
         await engine.enableVideo();
         await engine.enableLocalAudio(!muteLocalAudio);
-        await engine.setBeautyEffectOptions(true, {});
+        await engine.startPreview();
+        // Set the channel profile as live streaming.
+        await engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
+        // Set the usr role as host.
+        await engine.setClientRole(role);
         engine.addListener('UserMuteVideo', onUserMuteVideo);
         // engine.addListener('RemoteVideoStateChanged', onRemoteVideoStateChanged);
     };
@@ -89,7 +95,6 @@ const VideoView = ({ route }: any) => {
             }
             logger('Error', false, err);
         });
-        // engine.addListener('FacePositionChanged', onFacePositionChanged);
         engine.addListener('JoinChannelSuccess', onJoinChannelSuccess);
         engine.addListener('UserJoined', onUserJoined);
         engine.addListener('UserOffline', onUserOffline);
@@ -97,12 +102,6 @@ const VideoView = ({ route }: any) => {
             engine.removeAllListeners();
         };
     }, [agoraState, optionsCall]);
-
-    const onFacePositionChanged = (data: any) => {
-        setTimeout(() => {
-            console.log(data);
-        }, 5000);
-    };
 
     const onJoinChannelSuccess = useCallback(
         (channel: string, uid: number, elapsed: any) => {
@@ -133,6 +132,12 @@ const VideoView = ({ route }: any) => {
         },
         [agoraState],
     );
+
+    const switchRole = async () => {
+        const nextRole = isClient ? ClientRole.Broadcaster : ClientRole.Audience;
+        setRole(nextRole);
+        await engine.setClientRole(nextRole);
+    };
 
     const onUserMuteVideo = useCallback(
         (uid: number, muted: boolean) => {
@@ -203,11 +208,12 @@ const VideoView = ({ route }: any) => {
                     styles.containerLocalVideos,
                     !remoteFullView && { backgroundColor: Themes.COLORS.jumbo32 },
                 ]}
+
                 // onPress={() => {
                 //     remoteFullView && toggleOption('remoteFullView');
                 // }}
             >
-                {enableLocalVideo ? (
+                {enableLocalVideo && !isClient ? (
                     <RtcLocalView.SurfaceView
                         style={styles.localVideo}
                         channelId={channelName}
@@ -289,7 +295,7 @@ const VideoView = ({ route }: any) => {
     return (
         <SafeAreaView style={styles.safeView}>
             <StyledHeader
-                title={`Video Call ${channelName}`}
+                title={`Live Streaming ${channelName}`}
                 hasBorderBottom={false}
                 customContainer={styles.headerStyle}
             />
@@ -305,19 +311,33 @@ const VideoView = ({ route }: any) => {
                         customStyle={styles.optionCall}
                     />
                 </View> */}
+
                 {joinSucceed ? (
-                    <OptionVideoCall
-                        customStyle={styles.optionsCall}
-                        {...{
-                            muteAllRemoteAudio,
-                            muteLocalAudio,
-                            enableLocalVideo,
-                            toggleOption,
-                            leaveRoomVideo: endCall,
-                        }}
-                    />
+                    <>
+                        {!isClient && (
+                            <OptionVideoCall
+                                customStyle={styles.optionsCall}
+                                {...{
+                                    muteAllRemoteAudio,
+                                    muteLocalAudio,
+                                    enableLocalVideo,
+                                    toggleOption,
+                                    leaveRoomVideo: endCall,
+                                }}
+                            />
+                        )}
+                        <StyledButton
+                            title={`Change role to ${isClient ? 'Broadcaster' : 'Audience'}`}
+                            onPress={switchRole}
+                            customStyle={styles.startCallBtn}
+                        />
+                    </>
                 ) : (
-                    <StyledButton title={'Start Call'} onPress={startCall} customStyle={styles.startCallBtn} />
+                    <StyledButton
+                        title={'Join Channel Live Stream'}
+                        onPress={startCall}
+                        customStyle={styles.startCallBtn}
+                    />
                 )}
             </View>
         </SafeAreaView>
@@ -325,7 +345,6 @@ const VideoView = ({ route }: any) => {
 };
 const styles = ScaledSheet.create({
     wrapRemote: {
-        // flexDirection: 'row',
         paddingHorizontal: '15@s',
     },
     safeView: {
@@ -414,4 +433,4 @@ const styles = ScaledSheet.create({
     },
 });
 
-export default VideoView;
+export default LiveStreamView;
